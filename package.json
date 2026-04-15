@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch": "node fetch-movies.js"
+    "fetch": "node --env-file=.env fetch-movies.js"
   }
 }
