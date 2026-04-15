@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Watched Movies</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>My Watched Movies</h1>
+      <input id="search" type="search" placeholder="タイトルで検索…" />
+      <span id="count"></span>
+    </header>
+
+    <main id="grid" class="grid" aria-live="polite"></main>
+
+    <div id="modal" class="modal" hidden>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <button id="modal-close" aria-label="閉じる">×</button>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

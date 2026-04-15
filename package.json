@@ -1,0 +1,9 @@
+{
+  "name": "my-watched-movies",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch": "node fetch-movies.js"
+  }
+}
