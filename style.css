@@ -10,16 +10,24 @@ header {
   top: 0;
   z-index: 10;
   display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 14px 20px;
-  background: rgba(20, 21, 26, 0.9);
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(20, 21, 26, 0.92);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #2a2c33;
 }
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 header h1 { font-size: 18px; margin: 0; }
+#count { color: #9aa0aa; font-size: 13px; }
 #search {
   flex: 1;
+  min-width: 160px;
   max-width: 360px;
   padding: 8px 12px;
   border: 1px solid #3a3d45;
@@ -28,13 +36,24 @@ header h1 { font-size: 18px; margin: 0; }
   color: #e8e8ea;
   font-size: 14px;
 }
-#count { color: #9aa0aa; font-size: 13px; }
+#sort-key, #sort-dir {
+  padding: 8px 10px;
+  border: 1px solid #3a3d45;
+  border-radius: 6px;
+  background: #1d1f25;
+  color: #e8e8ea;
+  font-size: 14px;
+  cursor: pointer;
+}
+#sort-dir { min-width: 42px; }
+.size-row label { font-size: 13px; color: #9aa0aa; }
+#size { flex: 1; max-width: 320px; }
 
 .grid {
   display: grid;
   gap: 14px;
-  padding: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  padding: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w, 150px), 1fr));
 }
 .card {
   cursor: pointer;
@@ -57,9 +76,16 @@ header h1 { font-size: 18px; margin: 0; }
   padding: 8px;
 }
 .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.card .meta { padding: 8px 10px; }
-.card .title { font-size: 13px; line-height: 1.35; }
-.card .year { font-size: 11px; color: #9aa0aa; margin-top: 4px; }
+.card .meta { padding: 6px 8px 8px; }
+.card .title {
+  font-size: calc(11px + (var(--card-w, 150px) - 90px) * 0.03);
+  line-height: 1.35;
+}
+.card .year {
+  font-size: calc(10px + (var(--card-w, 150px) - 90px) * 0.015);
+  color: #9aa0aa;
+  margin-top: 4px;
+}
 
 .modal {
   position: fixed;

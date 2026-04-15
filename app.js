@@ -1,16 +1,70 @@
 const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const count = document.getElementById("count");
+const sortKeyEl = document.getElementById("sort-key");
+const sortDirEl = document.getElementById("sort-dir");
+const sizeEl = document.getElementById("size");
 const modal = document.getElementById("modal");
 const modalBody = modal.querySelector(".modal-body");
 const modalClose = document.getElementById("modal-close");
 
 let movies = [];
+const state = {
+  q: "",
+  sortKey: "year",
+  sortDir: "desc",
+  size: 150,
+};
+
+const STORAGE_KEY = "mwm-state";
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    Object.assign(state, s);
+  } catch {}
+  sortKeyEl.value = state.sortKey;
+  sortDirEl.textContent = state.sortDir === "desc" ? "↓" : "↑";
+  sizeEl.value = state.size;
+  applySize();
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function applySize() {
+  document.documentElement.style.setProperty("--card-w", `${state.size}px`);
+}
 
 async function load() {
+  loadState();
   const res = await fetch("movies-data.json");
   movies = await res.json();
-  render(movies);
+  update();
+}
+
+function update() {
+  let list = movies;
+  if (state.q) {
+    const q = state.q.toLowerCase();
+    list = list.filter((m) =>
+      [m.title, m.query, m.original_title].some((s) => s && s.toLowerCase().includes(q))
+    );
+  }
+  list = [...list].sort(compare);
+  render(list);
+}
+
+function compare(a, b) {
+  const dir = state.sortDir === "asc" ? 1 : -1;
+  if (state.sortKey === "year") {
+    const ay = a.year ? parseInt(a.year, 10) : -Infinity;
+    const by = b.year ? parseInt(b.year, 10) : -Infinity;
+    if (ay !== by) return (ay - by) * dir;
+    return (a.title || a.query).localeCompare(b.title || b.query, "ja");
+  }
+  return (a.title || a.query).localeCompare(b.title || b.query, "ja") * dir;
 }
 
 function render(list) {
@@ -35,9 +89,7 @@ function render(list) {
 }
 
 function openModal(m) {
-  const poster = m.poster_path
-    ? `<img src="${m.poster_path}" alt="" />`
-    : "";
+  const poster = m.poster_path ? `<img src="${m.poster_path}" alt="" />` : "";
   modalBody.innerHTML = `
     ${poster}
     <div class="info">
@@ -55,12 +107,27 @@ modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); }
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
 search.addEventListener("input", () => {
-  const q = search.value.trim().toLowerCase();
-  if (!q) return render(movies);
-  const filtered = movies.filter((m) =>
-    [m.title, m.query, m.original_title].some((s) => s && s.toLowerCase().includes(q))
-  );
-  render(filtered);
+  state.q = search.value.trim();
+  update();
+});
+
+sortKeyEl.addEventListener("change", () => {
+  state.sortKey = sortKeyEl.value;
+  saveState();
+  update();
+});
+
+sortDirEl.addEventListener("click", () => {
+  state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+  sortDirEl.textContent = state.sortDir === "desc" ? "↓" : "↑";
+  saveState();
+  update();
+});
+
+sizeEl.addEventListener("input", () => {
+  state.size = parseInt(sizeEl.value, 10);
+  applySize();
+  saveState();
 });
 
 function escapeHtml(s) {

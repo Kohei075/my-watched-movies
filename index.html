@@ -8,9 +8,22 @@
   </head>
   <body>
     <header>
-      <h1>My Watched Movies</h1>
-      <input id="search" type="search" placeholder="タイトルで検索…" />
-      <span id="count"></span>
+      <div class="row">
+        <h1>My Watched Movies</h1>
+        <span id="count"></span>
+      </div>
+      <div class="row">
+        <input id="search" type="search" placeholder="タイトルで検索…" />
+        <select id="sort-key" aria-label="並び替え項目">
+          <option value="year">公開年</option>
+          <option value="title">タイトル</option>
+        </select>
+        <button id="sort-dir" type="button" aria-label="昇順/降順切替">↓</button>
+      </div>
+      <div class="row size-row">
+        <label for="size">サイズ</label>
+        <input id="size" type="range" min="90" max="280" step="5" value="150" />
+      </div>
     </header>
 
     <main id="grid" class="grid" aria-live="polite"></main>
