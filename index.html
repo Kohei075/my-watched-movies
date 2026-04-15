@@ -7,24 +7,39 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header>
-      <div class="row">
-        <h1>My Watched Movies</h1>
-        <span id="count"></span>
-      </div>
-      <div class="row">
-        <input id="search" type="search" placeholder="タイトルで検索…" />
-        <select id="sort-key" aria-label="並び替え項目">
-          <option value="year">公開年</option>
-          <option value="title">タイトル</option>
-        </select>
-        <button id="sort-dir" type="button" aria-label="昇順/降順切替">↓</button>
-      </div>
-      <div class="row size-row">
-        <label for="size">サイズ</label>
-        <input id="size" type="range" min="90" max="280" step="5" value="150" />
-      </div>
+    <header class="topbar">
+      <button id="menu-toggle" aria-label="メニュー" aria-expanded="false">☰</button>
+      <h1>My Watched Movies</h1>
+      <span id="count"></span>
     </header>
+
+    <aside id="sidebar" class="sidebar" aria-label="操作パネル">
+      <div class="sidebar-inner">
+        <div class="field">
+          <label for="search">検索</label>
+          <input id="search" type="search" placeholder="タイトルで検索…" />
+        </div>
+
+        <div class="field">
+          <label for="sort-key">並び替え</label>
+          <div class="sort-row">
+            <select id="sort-key">
+              <option value="year">公開年</option>
+              <option value="title">タイトル</option>
+            </select>
+            <button id="sort-dir" type="button" aria-label="昇順/降順切替">↓</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="size">表示サイズ</label>
+          <input id="size" type="range" min="90" max="320" step="5" value="150" />
+          <div class="size-hint"><span id="size-val">150</span>px</div>
+        </div>
+      </div>
+    </aside>
+
+    <div id="backdrop" class="backdrop" hidden></div>
 
     <main id="grid" class="grid" aria-live="polite"></main>
 

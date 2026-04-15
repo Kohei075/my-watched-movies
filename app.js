@@ -4,6 +4,10 @@ const count = document.getElementById("count");
 const sortKeyEl = document.getElementById("sort-key");
 const sortDirEl = document.getElementById("sort-dir");
 const sizeEl = document.getElementById("size");
+const sizeValEl = document.getElementById("size-val");
+const menuToggle = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+const backdrop = document.getElementById("backdrop");
 const modal = document.getElementById("modal");
 const modalBody = modal.querySelector(".modal-body");
 const modalClose = document.getElementById("modal-close");
@@ -35,7 +39,17 @@ function saveState() {
 
 function applySize() {
   document.documentElement.style.setProperty("--card-w", `${state.size}px`);
+  if (sizeValEl) sizeValEl.textContent = state.size;
 }
+
+function setSidebar(open) {
+  sidebar.classList.toggle("open", open);
+  backdrop.hidden = !open;
+  menuToggle.setAttribute("aria-expanded", String(open));
+}
+
+menuToggle.addEventListener("click", () => setSidebar(!sidebar.classList.contains("open")));
+backdrop.addEventListener("click", () => setSidebar(false));
 
 async function load() {
   loadState();
